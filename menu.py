@@ -1,14 +1,14 @@
 #############################
-# Training (Menu)
-# JCY oct 23
-# PRO DB PY
+# projDBPY
+# 24.11.2023
+# Miguel Pinto Gomes
 #############################
 
 import tkinter as tk
 import geo01
 import info02
 import info05
-
+import database
 # exercises array
 a_exercise=["geo01", "info02", "info05"]
 albl_image=[None, None, None] # label (with images) array
@@ -24,8 +24,35 @@ def exercise(event,exer):
 
 #call display_results
 def display_result(event):
-    # TODO
-    print("display_result")
+    # Récupérer les résultats
+    all_results = database.get_all_results()
+
+    # Créer une nouvelle fenêtre
+    result_window = tk.Toplevel(window)
+    result_window.title("Results")
+    result_window.geometry("600x400")
+
+    # Créer des étiquettes
+    lbl_nickname = tk.Label(result_window, text="pseudo", font=("Arial", 12, "bold"))
+    lbl_duration = tk.Label(result_window, text="duration", font=("Arial", 12, "bold"))
+    lbl_dateAndHour = tk.Label(result_window, text="Date And Time", font=("Arial", 12, "bold"))
+    lbl_nb_try = tk.Label(result_window, text="Number of Tries", font=("Arial", 12, "bold"))
+    lbl_nb_ok = tk.Label(result_window, text="Number OK", font=("Arial", 12, "bold"))
+
+    # Positionner les étiquettes
+    lbl_nickname.grid(row=0, column=0, padx=10, pady=5)
+    lbl_duration.grid(row=0, column=1, padx=10, pady=5)
+    lbl_dateAndHour.grid(row=0, column=2, padx=10, pady=5)
+    lbl_nb_try.grid(row=0, column=3, padx=10, pady=5)
+    lbl_nb_ok.grid(row=0, column=4, padx=10, pady=5)
+
+    # Afficher les résultats d
+    for idx, result in enumerate(all_results, start=1):
+        tk.Label(result_window, text=result['pseudo']).grid(row=idx, column=0, padx=10, pady=5)
+        tk.Label(result_window, text=result['duration']).grid(row=idx, column=1, padx=10, pady=5)
+        tk.Label(result_window, text=result['dateAndHour']).grid(row=idx, column=2, padx=10, pady=5)
+        tk.Label(result_window, text=result['nb_try']).grid(row=idx, column=3, padx=10, pady=5)
+        tk.Label(result_window, text=result['nb_ok']).grid(row=idx, column=4, padx=10, pady=5)
 
 
 # Main window

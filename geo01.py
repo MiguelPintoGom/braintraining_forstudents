@@ -87,9 +87,29 @@ def next_point(event):
     lbl_target.configure(text=f"Cliquez sur le point ({round(target_x, 1)}, {round(target_y, 1)}). Echelle x -10 à +10, y-5 à +5")
 
 
-def save_game(event):
-    # TODO
-    print("dans save")
+def save_game(event, entry_pseudo):
+    global pseudo, exercise, start_date, nbtrials, nbsuccess
+
+    # Récupération du pseudo
+    pseudo = entry_pseudo.get()
+
+    # Calcul de la durée éféctuée pendant l'exercice
+    end_date = datetime.datetime.now()
+    duration = end_date - start_date
+    duration_to_str = "{:02d}:{:02d}".format(int(duration.total_seconds() / 60), int(duration.total_seconds() % 60))
+
+    # Sauvegarde dans la base de données
+    database.save_result(exercise, pseudo, start_date, duration_to_str, nbtrials, nbsuccess)
+
+    print("Enregistrement réussi")
+    #prochain exercice
+    nbtrials = 0
+    nbsuccess = 0
+    next_point(event=None)
+
+    # nouveau pseudo
+    lbl_result.configure(text=f"{pseudo} a : {nbsuccess} / {nbtrials} comme essais réussis")
+    window_geo01.update()
 
 
 def display_timer():

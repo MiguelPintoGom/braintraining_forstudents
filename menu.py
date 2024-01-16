@@ -16,6 +16,7 @@ from tkinter.ttk import Combobox
 from tkinter import messagebox
 from tkinter import Tk, Label, Button, Entry, StringVar, messagebox
 from database import create_user, login
+import hashlib
 
 
 class AuthenticationWindow(tk.Tk):
@@ -26,23 +27,35 @@ class AuthenticationWindow(tk.Tk):
 
         # Création des widgets
         self.label_username = Label(self, text="Nom d'utilisateur:")
-        self.entry_username = Entry(self)
+        self.entry_username = Entry(self, font=("Arial", 14))  # Ajustez la taille de la police
 
         self.label_password = Label(self, text="Mot de passe:")
-        self.entry_password = Entry(self, show="*")
+        self.entry_password = Entry(self, show="*", font=("Arial", 14))  # Ajustez la taille de la police
 
-        self.button_login = Button(self, text="Se connecter", command=self.login)
-        self.button_signup = Button(self, text="Créer un compte", command=self.signup)
+        self.button_login = Button(self, text="Se connecter", command=self.login, font=("Arial", 14))  # Ajustez la taille de la police
+        self.button_signup = Button(self, text="Créer un compte", command=self.signup, font=("Arial", 14))  # Ajustez la taille de la police
+
+        # Configuration pour centrer les éléments
+        self.grid_columnconfigure(0, weight=1)  # Colonne 0 prend tout l'espace disponible
+        self.grid_columnconfigure(1, weight=1)  # Colonne 1 prend tout l'espace disponible
 
         # Placement des widgets dans la fenêtre
-        self.label_username.grid(row=0, column=0, padx=10, pady=10, sticky="e")
-        self.entry_username.grid(row=0, column=1, padx=10, pady=10)
+        self.label_username.grid(row=0, column=0, pady=10, sticky="e")
+        self.entry_username.grid(row=0, column=1, pady=10, padx=10, sticky="w")
 
-        self.label_password.grid(row=1, column=0, padx=10, pady=10, sticky="e")
-        self.entry_password.grid(row=1, column=1, padx=10, pady=10)
+        self.label_password.grid(row=1, column=0, pady=10, sticky="e")
+        self.entry_password.grid(row=1, column=1, pady=10, padx=10, sticky="w")
 
-        self.button_login.grid(row=2, column=0, columnspan=2, pady=10)
-        self.button_signup.grid(row=3, column=0, columnspan=2, pady=10)
+        self.button_login.grid(row=2, column=0, columnspan=2, pady=20)
+        self.button_signup.grid(row=3, column=0, columnspan=2, pady=20)
+
+        # Centrer la fenêtre sur l'écran
+        self.update_idletasks()  # S'assurer que la fenêtre est correctement calculée avant le centrage
+        width = self.winfo_width()
+        height = self.winfo_height()
+        x = (self.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.winfo_screenheight() // 2) - (height // 2)
+        self.geometry(f"{width}x{height}+{x}+{y}")
 
     def login(self):
         username = self.entry_username.get()
@@ -54,14 +67,12 @@ class AuthenticationWindow(tk.Tk):
             messagebox.showinfo("Succès", "Connexion réussie!")
             self.destroy()  # Ferme la fenêtre d'authentification après la connexion réussie
             # Appelle ici la fonction pour afficher le menu principal ou d'autres fonctionnalités.
-
         else:
             messagebox.showerror("Erreur", "Échec de la connexion. Vérifiez vos informations d'identification.")
 
     def signup(self):
         signup_window = SignUpWindow(self)
-        signup_window.grab_set()  # Permet de rendre la fenêtre parente non cliquable pendant que la fenêtre fille est active
-        signup_window.wait_window()
+        signup_window.mainloop()
 
 class SignUpWindow(tk.Toplevel):
     def __init__(self, master):
@@ -71,21 +82,33 @@ class SignUpWindow(tk.Toplevel):
 
         # Création des widgets
         self.label_username = Label(self, text="Nom d'utilisateur:")
-        self.entry_username = Entry(self)
+        self.entry_username = Entry(self, font=("Arial", 14))  # Ajustez la taille de la police
 
         self.label_password = Label(self, text="Mot de passe:")
-        self.entry_password = Entry(self, show="*")
+        self.entry_password = Entry(self, show="*", font=("Arial", 14))  # Ajustez la taille de la police
 
-        self.button_create = Button(self, text="Créer le compte", command=self.create_account)
+        self.button_create = Button(self, text="Créer le compte", command=self.create_account, font=("Arial", 14))  # Ajustez la taille de la police
+
+        # Configuration pour centrer les éléments
+        self.grid_columnconfigure(0, weight=1)  # Colonne 0 prend tout l'espace disponible
+        self.grid_columnconfigure(1, weight=1)  # Colonne 1 prend tout l'espace disponible
 
         # Placement des widgets dans la fenêtre
-        self.label_username.grid(row=0, column=0, padx=10, pady=10, sticky="e")
-        self.entry_username.grid(row=0, column=1, padx=10, pady=10)
+        self.label_username.grid(row=0, column=0, pady=10, sticky="e")
+        self.entry_username.grid(row=0, column=1, pady=10, padx=10, sticky="w")
 
-        self.label_password.grid(row=1, column=0, padx=10, pady=10, sticky="e")
-        self.entry_password.grid(row=1, column=1, padx=10, pady=10)
+        self.label_password.grid(row=1, column=0, pady=10, sticky="e")
+        self.entry_password.grid(row=1, column=1, pady=10, padx=10, sticky="w")
 
-        self.button_create.grid(row=2, column=0, columnspan=2, pady=10)
+        self.button_create.grid(row=2, column=0, columnspan=2, pady=20)
+
+        # Centrer la fenêtre sur l'écran
+        self.update_idletasks()  # S'assurer que la fenêtre est correctement calculée avant le centrage
+        width = self.winfo_width()
+        height = self.winfo_height()
+        x = (self.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.winfo_screenheight() // 2) - (height // 2)
+        self.geometry(f"{width}x{height}+{x}+{y}")
 
     def create_account(self):
         username = self.entry_username.get()
@@ -97,7 +120,6 @@ class SignUpWindow(tk.Toplevel):
             messagebox.showinfo("Succès", f"Utilisateur '{username}' créé avec succès. ID: {result}")
         else:
             messagebox.showerror("Erreur", "Échec de la création de l'utilisateur.")
-
 
 if __name__ == "__main__":
     authentication_window = AuthenticationWindow()

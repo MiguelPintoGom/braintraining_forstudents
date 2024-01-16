@@ -4,7 +4,8 @@ Projet python-bd
 le 15.12.23
 """
 
-
+import hashlib
+import sqlite3
 import mysql.connector
 from mysql.connector import Error
 

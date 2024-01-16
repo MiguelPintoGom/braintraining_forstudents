@@ -175,9 +175,11 @@ def open_window_geo_01(window):
 
     # First call of next_point
     # Binding actions (canvas & buttons)
-    canvas.bind("<Button-1>", lambda event, entry_pseudo=entry_pseudo: canvas_click(event, entry_pseudo))
+    canvas.bind("<Button-1>", lambda event, entry_pseudo = entry_pseudo: canvas_click(event, entry_pseudo))
     btn_next.bind("<Button-1>", next_point)
     btn_finish.bind("<Button-1>", lambda e: save_game(e, entry_pseudo))
 
     # Main loop
     window_geo01.mainloop()
+
+

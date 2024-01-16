@@ -8,10 +8,10 @@ le 15.12.23
 import mysql.connector
 from mysql.connector import Error
 
-def connect_to_database():
+def connect_to_database(username, password):
     connection = None
     try:
-        connection = mysql.connector.connect_to_database(
+        connection = mysql.connector.connect(
             host='127.0.0.1',
             port='3306',
             database='projpy',
@@ -28,6 +28,67 @@ def connect_to_database():
         return None
 
     return connection
+
+
+
+def create_user(username, password):
+    try:
+        connection = connect_to_database("menu", "Pa$$w0rd")
+        if connection:
+            cursor = connection.cursor()
+
+            cursor.execute(f"SELECT id FROM players WHERE pseudo = '{username}'")
+            existing_user = cursor.fetchone()
+
+            if existing_user:
+                print(f"L'utilisateur avec le nom '{username}' existe déjà.")
+                return None
+            else:
+                cursor.execute(f"INSERT INTO players (pseudo, password) VALUES ('{username}', '{password}')")
+                connection.commit()
+                user_id = cursor.lastrowid
+                print(f"Utilisateur '{username}' ajouté avec succès. ID: {user_id}")
+                return user_id
+
+    except Error as e:
+        print(f"Erreur lors de la création de l'utilisateur : {e}")
+        return None
+
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("Connexion à la base de données fermée")
+
+
+def login(username, password):
+    try:
+        connection = connect_to_database("menu", "Pa$$w0rd")
+        if connection:
+            cursor = connection.cursor()
+
+            cursor.execute(f"SELECT id FROM players WHERE pseudo = '{username}' AND password = '{password}'")
+            user_id = cursor.fetchone()
+
+            if user_id:
+                print(f"Connecté en tant qu'utilisateur '{username}'")
+                return user_id
+            else:
+                print("Échec de la connexion. Vérifiez vos informations d'identification.")
+                return None
+
+    except Error as e:
+        print(f"Erreur lors de la connexion : {e}")
+        return None
+
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("Connexion à la base de données fermée")
+
+
+
 
 
 def get_all_results_with_exercise():
@@ -225,7 +286,6 @@ def save_info05_results(user_pseudo, start_date, duration, nb_trials, nb_ok):
             cursor = connection.cursor()
 
             # Récupérer l'ID de l'utilisateur ou l'ajouter s'il n'existe pas
-            user_pseudo = entry_pseudo.get()
             user_id = get_user_id(user_pseudo)
 
             if user_id is not None:

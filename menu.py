@@ -13,6 +13,96 @@ import datetime
 import database
 from tkinter import StringVar
 from tkinter.ttk import Combobox
+from tkinter import messagebox
+from tkinter import Tk, Label, Button, Entry, StringVar, messagebox
+from database import create_user, login
+
+
+class AuthenticationWindow(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("Authentification")
+
+        # Création des widgets
+        self.label_username = Label(self, text="Nom d'utilisateur:")
+        self.entry_username = Entry(self)
+
+        self.label_password = Label(self, text="Mot de passe:")
+        self.entry_password = Entry(self, show="*")
+
+        self.button_login = Button(self, text="Se connecter", command=self.login)
+        self.button_signup = Button(self, text="Créer un compte", command=self.signup)
+
+        # Placement des widgets dans la fenêtre
+        self.label_username.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+        self.entry_username.grid(row=0, column=1, padx=10, pady=10)
+
+        self.label_password.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+        self.entry_password.grid(row=1, column=1, padx=10, pady=10)
+
+        self.button_login.grid(row=2, column=0, columnspan=2, pady=10)
+        self.button_signup.grid(row=3, column=0, columnspan=2, pady=10)
+
+    def login(self):
+        username = self.entry_username.get()
+        password = self.entry_password.get()
+
+        result = login(username, password)
+
+        if result:
+            messagebox.showinfo("Succès", "Connexion réussie!")
+            self.destroy()  # Ferme la fenêtre d'authentification après la connexion réussie
+            # Appelle ici la fonction pour afficher le menu principal ou d'autres fonctionnalités.
+
+        else:
+            messagebox.showerror("Erreur", "Échec de la connexion. Vérifiez vos informations d'identification.")
+
+    def signup(self):
+        signup_window = SignUpWindow(self)
+        signup_window.grab_set()  # Permet de rendre la fenêtre parente non cliquable pendant que la fenêtre fille est active
+        signup_window.wait_window()
+
+class SignUpWindow(tk.Toplevel):
+    def __init__(self, master):
+        super().__init__(master)
+
+        self.title("Créer un compte")
+
+        # Création des widgets
+        self.label_username = Label(self, text="Nom d'utilisateur:")
+        self.entry_username = Entry(self)
+
+        self.label_password = Label(self, text="Mot de passe:")
+        self.entry_password = Entry(self, show="*")
+
+        self.button_create = Button(self, text="Créer le compte", command=self.create_account)
+
+        # Placement des widgets dans la fenêtre
+        self.label_username.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+        self.entry_username.grid(row=0, column=1, padx=10, pady=10)
+
+        self.label_password.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+        self.entry_password.grid(row=1, column=1, padx=10, pady=10)
+
+        self.button_create.grid(row=2, column=0, columnspan=2, pady=10)
+
+    def create_account(self):
+        username = self.entry_username.get()
+        password = self.entry_password.get()
+
+        result = create_user(username, password)
+
+        if result:
+            messagebox.showinfo("Succès", f"Utilisateur '{username}' créé avec succès. ID: {result}")
+        else:
+            messagebox.showerror("Erreur", "Échec de la création de l'utilisateur.")
+
+
+if __name__ == "__main__":
+    authentication_window = AuthenticationWindow()
+    authentication_window.mainloop()
+
 
 a_exercise = ["geo01", "info02", "info05"]
 albl_image = [None, None, None]  # Label (with images) array
@@ -23,8 +113,31 @@ dict_games = {"geo01": geo01.open_window_geo_01, "info02": info02.open_window_in
               "info05": info05.open_window_info_05}
 
 
+
+
+
+
+
 def exercise(event, exer):
     dict_games[exer](window)
+
+
+
+    def clear_entries(self):
+        self.entry_username.delete(0, tk.END)
+        self.entry_password.delete(0, tk.END)
+
+    def show_main_menu(self):
+        # Supprime le cadre de connexion
+        self.login_frame.destroy()
+
+        # Affiche le menu principal
+        self.menu_frame = tk.Frame(self.master)
+        self.menu_frame.pack()
+
+        # Reste du code du menu principal
+        # ...
+
 
 
 def display_result(event=None):
@@ -263,3 +376,4 @@ btn_finish = tk.Button(window, text="Quitter", font=("Arial", 15), command=lambd
 btn_finish.grid(row=2 + 2 * len(a_exercise) // 3, column=1)
 
 window.mainloop()
+

@@ -26,14 +26,14 @@ class AuthenticationWindow(tk.Tk):
         self.title("Authentification")
 
         # Création des widgets
-        self.label_username = Label(self, text="Nom d'utilisateur:")
-        self.entry_username = Entry(self, font=("Arial", 14))  # Ajustez la taille de la police
+        self.label_username = tk.Label(self, text="Nom d'utilisateur:")
+        self.entry_username = tk.Entry(self, font=("Arial", 14))
 
-        self.label_password = Label(self, text="Mot de passe:")
-        self.entry_password = Entry(self, show="*", font=("Arial", 14))  # Ajustez la taille de la police
+        self.label_password = tk.Label(self, text="Mot de passe:")
+        self.entry_password = tk.Entry(self, show="*", font=("Arial", 14))
 
-        self.button_login = Button(self, text="Se connecter", command=self.login, font=("Arial", 14))  # Ajustez la taille de la police
-        self.button_signup = Button(self, text="Créer un compte", command=self.signup, font=("Arial", 14))  # Ajustez la taille de la police
+        self.button_login = tk.Button(self, text="Se connecter", command=self.login, font=("Arial", 14))
+        self.button_signup = tk.Button(self, text="Créer un compte", command=self.signup, font=("Arial", 14))
 
         # Configuration pour centrer les éléments
         self.grid_columnconfigure(0, weight=1)  # Colonne 0 prend tout l'espace disponible
@@ -50,7 +50,7 @@ class AuthenticationWindow(tk.Tk):
         self.button_signup.grid(row=3, column=0, columnspan=2, pady=20)
 
         # Centrer la fenêtre sur l'écran
-        self.update_idletasks()  # S'assurer que la fenêtre est correctement calculée avant le centrage
+        self.update_idletasks()
         width = self.winfo_width()
         height = self.winfo_height()
         x = (self.winfo_screenwidth() // 2) - (width // 2)
@@ -65,8 +65,7 @@ class AuthenticationWindow(tk.Tk):
 
         if result:
             messagebox.showinfo("Succès", "Connexion réussie!")
-            self.destroy()  # Ferme la fenêtre d'authentification après la connexion réussie
-            # Appelle ici la fonction pour afficher le menu principal ou d'autres fonctionnalités.
+            self.destroy()
         else:
             messagebox.showerror("Erreur", "Échec de la connexion. Vérifiez vos informations d'identification.")
 
@@ -81,13 +80,13 @@ class SignUpWindow(tk.Toplevel):
         self.title("Créer un compte")
 
         # Création des widgets
-        self.label_username = Label(self, text="Nom d'utilisateur:")
-        self.entry_username = Entry(self, font=("Arial", 14))  # Ajustez la taille de la police
+        self.label_username = tk.Label(self, text="Nom d'utilisateur:")
+        self.entry_username = tk.Entry(self, font=("Arial", 14))
 
-        self.label_password = Label(self, text="Mot de passe:")
-        self.entry_password = Entry(self, show="*", font=("Arial", 14))  # Ajustez la taille de la police
+        self.label_password = tk.Label(self, text="Mot de passe:")
+        self.entry_password = tk.Entry(self, show="*", font=("Arial", 14))
 
-        self.button_create = Button(self, text="Créer le compte", command=self.create_account, font=("Arial", 14))  # Ajustez la taille de la police
+        self.button_create = tk.Button(self, text="Créer le compte", command=self.create_account, font=("Arial", 14))
 
         # Configuration pour centrer les éléments
         self.grid_columnconfigure(0, weight=1)  # Colonne 0 prend tout l'espace disponible
@@ -103,7 +102,7 @@ class SignUpWindow(tk.Toplevel):
         self.button_create.grid(row=2, column=0, columnspan=2, pady=20)
 
         # Centrer la fenêtre sur l'écran
-        self.update_idletasks()  # S'assurer que la fenêtre est correctement calculée avant le centrage
+        self.update_idletasks()
         width = self.winfo_width()
         height = self.winfo_height()
         x = (self.winfo_screenwidth() // 2) - (width // 2)
